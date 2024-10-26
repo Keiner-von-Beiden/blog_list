@@ -11,7 +11,8 @@ const OneBlog = (props) => {
             <a href={absoluteLink} target="_blank">{props.blog.url}</a>    {/* href value without quotation marks! */}
             <br />
             Rating: {props.blog.likes}
-            &nbsp; &nbsp; &nbsp; <button onClick={props.remove}>Delete</button>
+            &nbsp; &nbsp; <button onClick={props.vote}><b>+1</b></button> 
+            &nbsp; &nbsp; <button onClick={props.remove}>Delete</button>
         </p>
     )
 }

@@ -9,6 +9,7 @@ const Blogs = (props) => {
                 key={item.url}
                 blog={item}
                 remove={() => props.remove(item)}
+                vote={() => props.vote(item)}
             />
         )}
     </div>

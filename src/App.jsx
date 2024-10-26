@@ -19,19 +19,16 @@ const App = () => {
     })
     const [blogList, setBlogList] = useState([]) 
     const [newBlog, setNewBlog] = useState(initialBlogState)
-    // const [notificationMessage, setNotificationMessage] = useState(null)
 
     useEffect(() => {
         console.log('effect')
         blogService.getAll()
             .then(response => {
                 console.log('request for getting all blogs')
-                console.log('Reponse is', response.data)
                 setBlogList(response.data)
             })
     }, [])
     console.log('There are', blogList.length, 'blogs rendered')
-    console.log('which are', blogList)
 
     const addNew = (event) => {
         event.preventDefault()
@@ -54,15 +51,8 @@ const App = () => {
           : blogService
               .create(blogObject)
               .then(response => {
-                /* setNotificationMessage(`${response.data.title} has been added to the list`)
-                setTimeout(() => {
-                  setNotificationMessage(null)
-                }, 5000) */
-                console.log('blogService respond:', response.data)
                 setBlogList(blogList.concat(response.data))
                 setNewBlog(initialBlogState)
-                console.log('newBlog after submitting', newBlog)
-                console.log('blogObject after submitting', blogObject)
               })          
     }
 
@@ -77,7 +67,6 @@ const App = () => {
     }
 
     const deleteThisBlog = (blog) => {
-        console.log('event content', blog)
         console.log(`\"${blog.title}\" with id ${blog.id} is going to be deleted`)
         
         return (
@@ -86,18 +75,27 @@ const App = () => {
               .remove(blog.id)
               .then(response => {
                 setBlogList(blogList.filter(item => item.id !== blog.id))
-                /* setNotificationMessage(`The entry has been successfully deleted`) // was ${response.data.title} which didn't work 
-                setTimeout(() => {
-                  setNotificationMessage(null)
-                }, 5000) */
               })
-            : (() => {
-                /* setNotificationMessage(`${blog.name} has been left in the list`)
-                setTimeout(() => {
-                  setNotificationMessage(null)
-                }, 5000) */
-              })()
+            : console.log('Action cancelled')
         ) 
+    }
+
+    const voteForBlog = (blog) => {
+        console.log(`\"${blog.title}\" has + 1 like`)
+        console.log('blog id:', blog.id)
+        const changedBlog = { ...blog, likes: blog.likes + 1}
+
+        return (
+            blogService
+                .update(blog.id, changedBlog)
+                .then(response => {
+                    setBlogList(blogList.map(item => item.id !== blog.id ? item : response.data))
+                })
+                .catch(error => {
+                    console.log(error)  //(`'${blog.title}' was already removed from server`)
+                    setBlogList(blogList.filter(n => n.id !== blog.id))
+                })
+        )
     }
 
     return (
@@ -114,7 +112,7 @@ const App = () => {
             <Blogs 
                 list={blogList} 
                 remove={deleteThisBlog} 
-                //vote={voteForBlog} 
+                vote={voteForBlog} 
             />
         </div>
     ) 

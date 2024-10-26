@@ -9,7 +9,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "json-server -p3003 --watch db.json"
+    "deploy": "git add . && git commit -m uibuild && git push origin frontend"
   },
   "author": "KvB",
   "license": "MIT",
