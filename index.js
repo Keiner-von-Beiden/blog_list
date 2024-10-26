@@ -2,7 +2,7 @@ const config = require('./utils/config')
 const express = require('express')
 const app = express()
 const cors = require('cors')
-
+const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
 const mongoose = require('mongoose')
 
@@ -83,5 +83,5 @@ app.delete('/api/blogs/:id', (request, response, next) => {
 
 // const PORT = 3003
 app.listen(config.PORT, () => {
-  console.log(`Server running on port ${config.PORT}`)
+  logger.log(`Server running on port ${config.PORT}`)
 })
