@@ -66,37 +66,49 @@ const App = () => {
         
     }
 
-    const deleteThisBlog = (blog) => {
-        console.log(`\"${blog.title}\" with id ${blog.id} is going to be deleted`)
-        
-        return (
-          window.confirm(`Do you really want to delete \"${blog.title}\"?`)
-            ? blogService
-              .remove(blog.id)
-              .then(response => {
-                setBlogList(blogList.filter(item => item.id !== blog.id))
-              })
-            : console.log('Action cancelled')
-        ) 
+    const deleteThisBlog = async (blog) => {
+        console.log(`"${blog.title}" with id ${blog.id} is going to be deleted`)
+      
+        if (window.confirm(`Do you really want to delete "${blog.title}"?`)) {
+          try {
+            await blogService.remove(blog.id)
+            setBlogList(blogList.filter(item => item.id !== blog.id))
+          } catch (error) {
+            console.error('Error deleting blog:', error)
+          }
+        } else {
+          console.log('Action cancelled')
+        }
     }
 
-    const voteForBlog = (blog) => {
-        console.log(`\"${blog.title}\" has + 1 like`)
+    const voteForBlog = async (blog) => {
+        console.log(`"${blog.title}" has + 1 like`)
         console.log('blog id:', blog.id)
-        const changedBlog = { ...blog, likes: blog.likes + 1}
-
-        return (
-            blogService
-                .update(blog.id, changedBlog)
-                .then(response => {
-                    setBlogList(blogList.map(item => item.id !== blog.id ? item : response.data))
-                })
-                .catch(error => {
-                    console.log(error)  //(`'${blog.title}' was already removed from server`)
-                    setBlogList(blogList.filter(n => n.id !== blog.id))
-                })
-        )
+        const changedBlog = { ...blog, likes: blog.likes + 1 }
+      
+        try {
+            const response = await blogService.update(blog.id, changedBlog)
+            setBlogList(blogList.map(item => item.id !== blog.id ? item : response.data))
+        } catch (error) {
+            console.error('Error updating blog:', error)
+            setBlogList(blogList.filter(n => n.id !== blog.id))
+        }
     }
+
+    const voteAgainstBlog = async (blog) => {
+        console.log(`\"${blog.title}\" has - 1 like`)
+        console.log('blog id:', blog.id)
+        const changedBlog = { ...blog, likes: blog.likes - 1}
+
+        try {
+            const response = await blogService.update(blog.id, changedBlog)
+            setBlogList(blogList.map(item => item.id !== blog.id ? item : response.data))
+        } catch (error) {
+            console.error('Error updating blog:', error)
+            setBlogList(blogList.filter(n => n.id !== blog.id))
+        }
+    }
+    
 
     return (
         <div>
@@ -112,7 +124,8 @@ const App = () => {
             <Blogs 
                 list={blogList} 
                 remove={deleteThisBlog} 
-                vote={voteForBlog} 
+                vote={voteForBlog}
+                retract={voteAgainstBlog}
             />
         </div>
     ) 

@@ -10,6 +10,7 @@ const Blogs = (props) => {
                 blog={item}
                 remove={() => props.remove(item)}
                 vote={() => props.vote(item)}
+                retract={() => props.retract(item)}
             />
         )}
     </div>

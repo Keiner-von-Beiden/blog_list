@@ -12,7 +12,8 @@ const OneBlog = (props) => {
             <br />
             Rating: {props.blog.likes}
             &nbsp; &nbsp; <button onClick={props.vote}><b>+1</b></button> 
-            &nbsp; &nbsp; <button onClick={props.remove}>Delete</button>
+            &nbsp; &nbsp; <button onClick={props.retract}><b>&ndash;1</b></button>
+            &nbsp; &nbsp; &nbsp; &nbsp; <button onClick={props.remove}>Delete</button>
         </p>
     )
 }
