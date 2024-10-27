@@ -1,0 +1,50 @@
+[
+  {
+    "author": "John F. Kennedy",
+    "title": "How to save the world",
+    "url": "www.1960s.gov.us",
+    "likes": 5
+  },
+  {
+    "author": "Donald Trump",
+    "title": "Make America great again",
+    "url": "www.2010s.gov.us",
+    "likes": 1
+  },
+  {
+    "author": "Pablo Picasso",
+    "title": "Draw like a pro",
+    "url": "www.theworldofarts.com",
+    "likes": 10
+  },
+  {
+    "author": "Johann Sebastian Bach",
+    "title": "Music telling",
+    "url": "www.musiccollection.de",
+    "likes": 13
+  },
+  {
+    "author": "Charles Aznavour",
+    "title": "C'est la vie",
+    "url": "www.chansons.fr",
+    "likes": 4
+  },
+  {
+    "author": "Leonardo da Vinci",
+    "title": "Renaissance en Italie",
+    "url": "www.belle.it",
+    "likes": 5
+  },
+  {
+    "author": "",
+    "title": "All around me",
+    "url": "www.blogs.io",
+    "likes": 5
+  },
+  {
+    "author": "Coco Channel",
+    "title": "La robe noire",
+    "url": "www.fashion.com/blogs",
+    "likes": 7
+  }
+]
