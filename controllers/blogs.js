@@ -1,69 +1,68 @@
 const blogsRouter = require('express').Router()
 const { Blog } = require('../models/blogmodel')
 
-blogsRouter.get('/', (request, response) => {
-    // console.log('Request received')
-    Blog
-      .find({})
-      .then(blogs => {
+blogsRouter.get('/', async (request, response) => {
+    try { 
+        const blogs = await Blog.find({})
         response.json(blogs)
-      })
-})
-  
-blogsRouter.get('/:id', (request, response, next) => {
-    Blog
-      .findById(request.params.id)
-      .then(blog => {
-          if (blog) {
-            response.json(blog)
-          } else {
-            response.status(404).send({ error: 'document not found'})
-          }
-      })
-      .catch(error => next(error))
-})
-  
-blogsRouter.get('/info', (request, response, next) => {
-    Blog
-      .countDocuments({})
-      .then(count => {
-        response.send(`
-          <div>
-            <p>The list contains ${count} blogs.</p>
-            <p>${new Date()}</p>
-          </div>
-        `)
-      })
-      .catch(error => next(error))
-})
-  
-blogsRouter.post('/', (request, response) => {
-    const blog = new Blog(request.body)
-  
-    blog
-      .save()
-      .then(result => {
-        response.status(201).json(result)
-      })
-})
-  
-blogsRouter.delete('/:id', (request, response, next) => {
-    // console.log('id to be deleted:', request.params.id)
-    Blog
-      .findByIdAndDelete(request.params.id)
-      .then(result => {
-        response.status(204).end()
-      })
-      .catch(error => next(error))
+    } catch (error) {
+        next(error)
+    }
 })
 
-blogsRouter.put('/:id', (request, response, next) => {
-    Blog
-      .findByIdAndUpdate(request.params.id, request.body, { new: true })
-      .then(updatedBlog => {
-        response.json(updatedBlog)
-      })
-      .catch(error => next(error))
+blogsRouter.get('/:id', async (request, response, next) => {
+    try {
+        const blog = await Blog.findById(request.params.id)
+        if (blog) {
+            response.json(blog)
+        } else {
+            response.status(404).send({ error: 'document not found' })
+        }
+    } catch (error) {
+        next(error)
+    }
+})
+
+blogsRouter.get('/info', async (request, response, next) => {
+    try { 
+        const count = await Blog.countDocuments({})
+        response.send(`
+            <div>
+                <p>The list contains ${count} blogs.</p>
+                <p>${new Date()}</p>
+            </div>
+        `)
+    } catch (error) {
+        next(error)
+    }
+})
+
+blogsRouter.post('/', async (request, response, next) => {
+    const blog = new Blog(request.body)
+    try {
+        const result = await blog.save()
+        response.status(201).json(result)
+    } catch (error) {
+        next(error)
+    }
+})
+  
+blogsRouter.delete('/:id', async (request, response, next) => {
+    try {
+        await Blog.findByIdAndDelete(request.params.id)
+        response.status(204).end()
+    } catch (error) {
+        next(error)
+    }
+})
+
+blogsRouter.put('/:id', async (request, response, next) => {
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true })
+    response.json(updatedBlog)
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = blogsRouter

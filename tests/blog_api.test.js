@@ -81,6 +81,40 @@ test('All blog posts are returned', async () => {
     expect(response.body).toHaveLength(initialBlogs.length)
 })
 
+test('A valid blog post can be added', async () => {
+    const newBlog = {
+        author: "Leo Tolstoy",
+        title: "A life story in ten volumes",
+        url: "www.longstories.ru",
+        likes: 7
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  
+    const response = await api.get('/api/blogs')
+    const titles = response.body.map(item => item.title)
+  
+    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    expect(titles).toContain('A life story in ten volumes')
+})
+
+test('One blog post is deleted correctly', async () => {
+    const response = await api.get('/api/blogs')
+    const id = response.body[0].id
+    // console.log('id for removing:', id)
+
+    await api.delete(`/api/blogs/${id}`)
+        .expect(204)
+    const responseAfter = await api.get('/api/blogs')
+    expect(responseAfter.body).toHaveLength(initialBlogs.length - 1)
+    await api.get(`/api/blogs/${id}`)
+        .expect(404)
+})
+
 afterAll(async () => {
     await mongoose.connection.close()
 })
